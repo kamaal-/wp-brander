@@ -128,7 +128,7 @@ class Wordpress_Brander_Admin{
 
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
-                    wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), WP_Brander::VERSION );
+                    wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/wp-brander-admin.css', __FILE__ ), array(), WP_Brander::VERSION );
             }
 
     }

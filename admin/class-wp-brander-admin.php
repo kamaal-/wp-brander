@@ -149,6 +149,19 @@ class Wordpress_Brander_Admin{
 
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
+
+            		//Load Latest media manager if exists
+            		if( function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '>=' ) ) {
+				        //call for new media manager
+				        wp_enqueue_media();
+				    }
+				    //Or old WP < 3.5
+				    else {
+				        wp_enqueue_script('media-upload');
+				        wp_enqueue_script('thickbox');
+				        wp_enqueue_style('thickbox');
+				    }
+
                     wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/wp-brander-admin.js', __FILE__ ), array( 'jquery' ), WP_Brander::VERSION );
             }
 
@@ -229,6 +242,13 @@ class Wordpress_Brander_Admin{
      */
     public function filter_method_name() {
             // @TODO: Define your filter hook callback here
+    }
+    /**
+	* Gettin wordpress version
+    */
+    private function get_wordpress_version(){
+	    	global $wp_version;
+	   		return $wp_version;
     }
 
 }

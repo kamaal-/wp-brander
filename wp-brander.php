@@ -1,5 +1,6 @@
 <?php
 /**
+ * ﷽ 
  * WordPress Brander.
  *
  * A Wordpress plugin for custom favicon & custom admin login/register logo.
@@ -11,7 +12,7 @@
  * @copyright 2013 Kamaal Aboothalib
  *
  * @wordpress-plugin
- * Plugin Name:       WpBrander
+ * Plugin Name:       WordPress Brander
  * Plugin URI:        http://kamaal.me/wp-brander
  * Description:       A Wordpress plugin for custom favicon & custom admin login/register logo.
  * Version:           1.0.0.1
@@ -23,3 +24,36 @@
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/kamaal-/wp-brander
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+
+        die;
+
+}
+
+/*
+ * The code below is intended to to give the lightest footprint possible.
+ */
+if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+
+        require_once( plugin_dir_path( __FILE__ ) . 'admin/class-wp-brander-admin.php' );
+        add_action( 'plugins_loaded', array( 'Wordpress_Brander_Admin', 'get_instance' ) );
+
+}
+
+
+/*----------------------------------------------------------------------------*
+ * Dashboard and Administrative Functionality
+ *----------------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------------*
+ * Activation hook
+ *----------------------------------------------------------------------------*/
+register_activation_hook( __FILE__, 'myplugin_activate' );
+
+function myplugin_activate(){
+	
+}

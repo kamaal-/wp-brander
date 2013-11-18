@@ -18,7 +18,7 @@
  * Version:           1.0.0.1
  * Author:            Kamaal Aboothalib
  * Author URI:        http://kamaal.me/
- * Text Domain:       wp-brander-elephas
+ * Text Domain:       elephas-wp-brander
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages
@@ -32,6 +32,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 }
 
+require_once( plugin_dir_path( __FILE__ ) . 'public/class-wp-brander.php' );
+
+add_action( 'plugins_loaded', array( 'WP_Brander', 'get_instance' ) );
 /*
  * The code below is intended to to give the lightest footprint possible.
  */

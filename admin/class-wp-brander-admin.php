@@ -260,16 +260,12 @@ class Wordpress_Brander_Admin{
     function get_settings_sections() {
         $sections = array(
             array(
-                'id' => 'wedevs_basics',
-                'title' => __( 'Basic Settings', 'wedevs' )
+                'id' => 'wp_brander_favicons',
+                'title' => __( 'Favicons', $this->plugin_slug )
             ),
             array(
-                'id' => 'wedevs_advanced',
-                'title' => __( 'Advanced Settings', 'wedevs' )
-            ),
-            array(
-                'id' => 'wedevs_others',
-                'title' => __( 'Other Settings', 'wpuf' )
+                'id' => 'wp_brander_login',
+                'title' => __( 'Login Screen', $this->plugin_slug )
             )
         );
         return $sections;
@@ -282,7 +278,7 @@ class Wordpress_Brander_Admin{
      */
     function get_settings_fields() {
         $settings_fields = array(
-            'wedevs_basics' => array(
+            'wp_brander_favicons' => array(
                 array(
                     'name' => 'text_val',
                     'label' => __( 'Text Input (integer validation)', 'wedevs' ),

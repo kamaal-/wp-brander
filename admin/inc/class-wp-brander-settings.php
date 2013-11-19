@@ -83,7 +83,7 @@ class Generate_Option {
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
 
-            	
+
             	
             }
 
@@ -98,8 +98,6 @@ class Generate_Option {
      * @return    null    Return early if no settings page is registered.
      */
     public function enqueue_options_scripts() {
-
-    		
 
             if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
                     return;

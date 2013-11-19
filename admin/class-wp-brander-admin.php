@@ -47,7 +47,7 @@ class Wordpress_Brander_Admin{
 	        
 	        $plugin = WP_Brander::get_instance();
 	        $this->plugin_slug = $plugin->get_plugin_slug();
-	        $this->$parent_slug = $plugin->get_parent_slug();
+	        $this->parent_slug = $plugin->get_parent_slug();
 
 	        // Load admin style sheet and JavaScript.
 	        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
@@ -166,7 +166,7 @@ class Wordpress_Brander_Admin{
 	                    __( 'Custom Settings', $this->plugin_slug ),
 	                    __( 'Custom menu', $this->parent_slug ),
 	                    'remove_users',
-	                    $this->plugin_slug,
+	                    $this->parent_slug,
 	                    array( $this, 'display_plugin_admin_page' )
 	            );
 

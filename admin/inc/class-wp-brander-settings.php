@@ -277,8 +277,6 @@ class Generate_Option {
 
         $html = '';
 
-        $html .= 'Du'.$this->plugin_screen_hook_suffix;
-
         foreach ( $args['options'] as $key => $label ) {
             $html .= sprintf( '<input type="radio" class="radio" id="%1$s[%2$s][%3$s]" name="%1$s[%2$s]" value="%3$s"%4$s />', $args['section'], $args['id'], $key, checked( $value, $key, false ) );
             $html .= sprintf( '<label for="%1$s[%2$s][%4$s]"> %3$s</label><br>', $args['section'], $args['id'], $label, $key );
@@ -364,25 +362,8 @@ class Generate_Option {
         $id = $args['section']  . '[' . $args['id'] . ']';
         $js_id = $args['section']  . '\\\\[' . $args['id'] . '\\\\]';
         $html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value );
-        $html .= '<input type="button" class="button wpsf-browse" id="'. $id .'_button" value="Browse" />
-        <script type="text/javascript">
-        jQuery(document).ready(function($){
-            $("#'. $js_id .'_button").click(function() {
-                tb_show("", "media-upload.php?post_id=0&amp;type=image&amp;TB_iframe=true");
-                window.original_send_to_editor = window.send_to_editor;
-                window.send_to_editor = function(html) {
-                    var url = $(html).attr(\'href\');
-                    if ( !url ) {
-                        url = $(html).attr(\'src\');
-                    };
-                    $("#'. $js_id .'").val(url);
-                    tb_remove();
-                    window.send_to_editor = window.original_send_to_editor;
-                };
-                return false;
-            });
-        });
-        </script>';
+        $html .= '<input type="button" class="button media-uploader" id="'. $id .'_button" value="Browse" />';
+        
         $html .= sprintf( '<span class="description"> %s</span>', $args['desc'] );
 
         echo $html;

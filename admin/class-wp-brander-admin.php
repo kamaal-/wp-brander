@@ -180,6 +180,14 @@ class Wordpress_Brander_Admin{
 
     		}else{
 
+    			$this->plugin_screen_hook_suffix = add_submenu_page( 
+    					$this->parent_slug , 
+    					'Wordpress Brander Settings', 
+    					'Wordpress Brander', 
+    					'remove_users', 
+    					$this->plugin_slug, 
+    					array( $this, 'display_plugin_admin_page' ) );
+
     		}
             
 

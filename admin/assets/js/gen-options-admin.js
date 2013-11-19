@@ -5,7 +5,8 @@ jQuery(document).ready(function($) {
 	$('.media-uploader').on('click', function (event) {
 
 		var dis = $(this),
-			field = dis.closest('td').find('.media-uploader-field');
+			field = dis.closest('td').find('.media-uploader-field'),
+			imageHolder = '<div class="img-holder"></div>';
 
 		event.preventDefault();
 		//If the frame already exists, reopen it

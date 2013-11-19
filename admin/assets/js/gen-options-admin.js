@@ -3,6 +3,10 @@ jQuery(document).ready(function($) {
 	var custom_file_frame;
 
 	$('.media-uploader').on('click', function (event) {
+
+		var dis = $(this),
+			field = dis.closest('td').find('.media-uploader-field');
+
 		event.preventDefault();
 		//If the frame already exists, reopen it
 	    if (typeof(custom_file_frame)!=="undefined") {
@@ -27,6 +31,7 @@ jQuery(document).ready(function($) {
 	    custom_file_frame.on('select', function() {
 
 	        var attachment = custom_file_frame.state().get('selection').first().toJSON();
+	        field.val(attachment.url);
 	        
 	    });
 

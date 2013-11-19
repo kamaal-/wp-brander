@@ -347,7 +347,7 @@ class Wordpress_Brander_Admin{
                     'default' => ''
                 )
             ),
-            'wedevs_advanced' => array(
+            'wp_brander_login' => array(
                 array(
                     'name' => 'text',
                     'label' => __( 'Text Input', 'wedevs' ),

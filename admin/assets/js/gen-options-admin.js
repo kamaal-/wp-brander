@@ -25,9 +25,10 @@ jQuery(document).ready(function($) {
 
 	      //callback for selected image
 	    custom_file_frame.on('select', function() {
+
 	        var attachment = custom_file_frame.state().get('selection').first().toJSON();
 	        
-	      });
+	    });
 
 	      //Open modal
 	      custom_file_frame.open();

@@ -361,7 +361,7 @@ class Generate_Option {
         $size = isset( $args['size'] ) && !is_null( $args['size'] ) ? $args['size'] : 'regular';
         $id = $args['section']  . '[' . $args['id'] . ']';
         $js_id = $args['section']  . '\\\\[' . $args['id'] . '\\\\]';
-        $html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value );
+        $html = sprintf( '<input type="text" class="%1$s-text media-uploader-field" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value );
         $html .= '<input type="button" class="button media-uploader" id="'. $id .'_button" value="Browse" />';
         
         $html .= sprintf( '<span class="description"> %s</span>', $args['desc'] );

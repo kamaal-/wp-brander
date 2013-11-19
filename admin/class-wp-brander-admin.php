@@ -44,46 +44,30 @@ class Wordpress_Brander_Admin{
      * @since     1.0.0.1
      */
     private function __construct() {
+	        
+	        $plugin = WP_Brander::get_instance();
+	        $this->plugin_slug = $plugin->get_plugin_slug();
+	        $this->$parent_slug = $plugin->get_parent_slug();
 
-        /*
-         * @TODO :
-         *
-         * - Uncomment following lines if the admin class should only be available for super admins
-         */
-        /* if( ! is_super_admin() ) {
-                return;
-        } */
+	        // Load admin style sheet and JavaScript.
+	        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+	        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
-        /*
-         * Call $plugin_slug from public plugin class.
-         *
-         * @TODO:
-         *
-         * - Rename "Plugin_Name" to the name of your initial plugin class
-         *
-         */
-        $plugin = WP_Brander::get_instance();
-        $this->plugin_slug = $plugin->get_plugin_slug();
+	        // Add the options page and menu item.
+	        add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
-        // Load admin style sheet and JavaScript.
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+	        // Add an action link pointing to the options page.
+	        $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . 'wp-brander.php' );
+	        add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 
-        // Add the options page and menu item.
-        add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
-
-        // Add an action link pointing to the options page.
-        $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . 'wp-brander.php' );
-        add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
-
-        /*
-         * Define custom functionality.
-         *
-         * Read more about actions and filters:
-         * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-         */
-        add_action( '@TODO', array( $this, 'action_method_name' ) );
-        add_filter( '@TODO', array( $this, 'filter_method_name' ) );
+	        /*
+	         * Define custom functionality.
+	         *
+	         * Read more about actions and filters:
+	         * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
+	         */
+	        add_action( '@TODO', array( $this, 'action_method_name' ) );
+	        add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
     }
 
@@ -96,20 +80,20 @@ class Wordpress_Brander_Admin{
      */
     public static function get_instance() {
 
-        /*
-         *
-         * - Uncomment following lines if the admin class should only be available for super admins
-         */
-        /* if( ! is_super_admin() ) {
-                return;
-        } */
+	        /*
+	         *
+	         * - Uncomment following lines if the admin class should only be available for super admins
+	         */
+	        /* if( ! is_super_admin() ) {
+	                return;
+	        } */
 
-        // If the single instance hasn't been set, set it now.
-        if ( null == self::$instance ) {
-                self::$instance = new self;
-        }
+	        // If the single instance hasn't been set, set it now.
+	        if ( null == self::$instance ) {
+	                self::$instance = new self;
+	        }
 
-        return self::$instance;
+	        return self::$instance;
     }
 
     /**
@@ -174,22 +158,31 @@ class Wordpress_Brander_Admin{
      */
     public function add_plugin_admin_menu() {
 
-            /*
-             * Add a settings page for this plugin to the Settings menu.
-             *
-             * NOTE:  Alternative menu locations are available via WordPress administration menu functions.
-             *
-             * Administration Menus: http://codex.wordpress.org/Administration_Menus
-             *
-             * For reference: http://codex.wordpress.org/Roles_and_Capabilities
-             */
-            $this->plugin_screen_hook_suffix = add_options_page(
-                    __( 'Wordpress Brander Settings', $this->plugin_slug ),
-                    __( 'Wordpress Brander', $this->plugin_slug ),
-                    'manage_options',
-                    $this->plugin_slug,
-                    array( $this, 'display_plugin_admin_page' )
-            );
+    		$topmen_exists = $this->toplevel_menu_exists();
+
+    		if(!$topmen_exists){
+
+    			add_menu_page(
+	                    __( 'Custom Settings', $this->plugin_slug ),
+	                    __( 'Custom menu', $this->parent_slug ),
+	                    'remove_users',
+	                    $this->plugin_slug,
+	                    array( $this, 'display_plugin_admin_page' )
+	            );
+
+    			$this->plugin_screen_hook_suffix = add_submenu_page( 
+    					$this->parent_slug , 
+    					'Wordpress Brander Settings', 
+    					'Wordpress Brander', 
+    					'remove_users', 
+    					$this->plugin_slug, 
+    					array( $this, 'display_plugin_admin_page' ) );
+
+    		}else{
+
+    		}
+            
+
 
     }
 
@@ -199,7 +192,9 @@ class Wordpress_Brander_Admin{
      * @since    1.0.0.1
      */
     public function display_plugin_admin_page() {
-        include_once( 'views/admin.php' );
+
+        	include_once( 'views/admin.php' );
+    
     }
 
     /**
@@ -249,6 +244,20 @@ class Wordpress_Brander_Admin{
     private function get_wordpress_version(){
 	    	global $wp_version;
 	   		return $wp_version;
+    }
+
+    /**
+	* Check admin top level menu exists
+    */
+    private function toplevel_menu_exists(){
+	    	global $menu;
+			$menu_exist = false;
+			foreach($menu as $item) {
+			    if(strtolower($item[0]) == strtolower('Custom menu')) {
+			        $menu_exist = true;
+			    }
+			}
+			return $menu_exist;
     }
 
 }

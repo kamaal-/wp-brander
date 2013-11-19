@@ -30,9 +30,6 @@ class WP_Brander {
 
 	/**
 	 *
-	 * Unique identifier for your plugin.
-	 *
-	 *
 	 * The variable name is used as the text domain when internationalizing strings
 	 * of text. Its value should match the Text Domain file header in the main
 	 * plugin file.
@@ -42,6 +39,19 @@ class WP_Brander {
 	 * @var      string
 	 */
 	protected $plugin_slug = 'elephas-wp-brander';
+
+
+
+
+	/**
+	 *
+	 * @since    1.0.0.1
+	 *
+	 * @var      string
+	 */
+	protected $parent_slug = 'elephas-package';
+
+
 
 	/**
 	 * Instance of this class.
@@ -87,6 +97,17 @@ class WP_Brander {
 	 */
 	public function get_plugin_slug() {
 		return $this->plugin_slug;
+	}
+
+	/**
+	 * Return the parent slug.
+	 *
+	 * @since    1.0.0.1
+	 *
+	 *@return    Parent slug variable.
+	 */
+	public function get_parent_slug() {
+		return $this->parent_slug;
 	}
 
 	/**

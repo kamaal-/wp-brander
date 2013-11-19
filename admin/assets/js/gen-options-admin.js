@@ -66,7 +66,7 @@ jQuery(document).ready(function($) {
 	    }, timeout); 
 	};
 
-	pruduceImage = function (url, result) {
+	produceImage = function (url, result) {
 	    document.body.innerHTML += "<span class='" + result + "'>" + 
 	        result + ": " + url + "</span><br>";
 	}   

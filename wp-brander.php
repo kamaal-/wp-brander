@@ -38,9 +38,11 @@ add_action( 'plugins_loaded', array( 'WP_Brander', 'get_instance' ) );
 /*
  * The code below is intended to to give the lightest footprint possible.
  */
-if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+if ( is_admin() ) {
 
+		require_once( plugin_dir_path( __FILE__ ) . 'admin/inc/class-wp-brander-settings.php' );
         require_once( plugin_dir_path( __FILE__ ) . 'admin/class-wp-brander-admin.php' );
+
         add_action( 'plugins_loaded', array( 'Wordpress_Brander_Admin', 'get_instance' ) );
 
 }

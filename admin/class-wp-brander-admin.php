@@ -37,6 +37,8 @@ class Wordpress_Brander_Admin{
      */
     protected $plugin_screen_hook_suffix = null;
 
+    private $settings_api;
+
     /**
      * Initialize the plugin by loading admin scripts & styles and adding a
      * settings page and menu.
@@ -45,7 +47,12 @@ class Wordpress_Brander_Admin{
      */
     private function __construct() {
 	        
+	        require_once(ABSPATH.'wp-admin/includes/plugin.php');
+
 	        $plugin = WP_Brander::get_instance();
+
+	        $this->settings_api = new Generate_Option( 'custom-menu_page_elephas-wp-brander' );
+
 	        $this->plugin_slug = $plugin->get_plugin_slug();
 	        $this->parent_slug = $plugin->get_parent_slug();
 
@@ -56,18 +63,16 @@ class Wordpress_Brander_Admin{
 	        // Add the options page and menu item.
 	        add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
+
+
 	        // Add an action link pointing to the options page.
 	        $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . 'wp-brander.php' );
 	        add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 
-	        /*
-	         * Define custom functionality.
-	         *
-	         * Read more about actions and filters:
-	         * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-	         */
-	        add_action( 'admin_init', array( $this, 'initialize_wp_brander_options' ) );
-	        add_action( '@TODO', array( $this, 'action_method_name' ) );
+	        //Action
+	        add_action( 'admin_init', array( $this, 'settings_api_init' ) );
+
+	        //Filter
 	        add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
     }
@@ -113,6 +118,14 @@ class Wordpress_Brander_Admin{
 
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
+
+            		//Load Latest media manager if exists
+            		if( !function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '<=' ) ) {
+				        wp_enqueue_style('thickbox');
+				    }
+				    
+
+				    wp_enqueue_style( 'wp-color-picker' );
                     wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/wp-brander-admin.css', __FILE__ ), array(), WP_Brander::VERSION );
             }
 
@@ -139,12 +152,12 @@ class Wordpress_Brander_Admin{
             		if( function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '>=' ) ) {
 				        //call for new media manager
 				        wp_enqueue_media();
+				         wp_enqueue_script('wp-color-picker');
 				    }
 				    //Or old WP < 3.5
 				    else {
 				        wp_enqueue_script('media-upload');
 				        wp_enqueue_script('thickbox');
-				        wp_enqueue_style('thickbox');
 				    }
 
                     wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/wp-brander-admin.js', __FILE__ ), array( 'jquery' ), WP_Brander::VERSION );
@@ -200,12 +213,18 @@ class Wordpress_Brander_Admin{
      */
     public function display_plugin_admin_page() {
 
-        	include_once( 'views/admin.php' );
+        	echo '<div class="wrap">';
 
-        	settings_fields( 'favicon_uploader_section' ); 
+	        $this->settings_api->show_navigation();
+	        $this->settings_api->show_forms();
 
-			do_settings_sections( 'favicon_uploader_section' );
-    
+	        echo '</div>';
+
+        	$seoboosterpropluginfo = get_plugin_data( WP_PLUGIN_DIR . '/wp-brander/wp-brander.php');
+			$version = $seoboosterpropluginfo['Version'];
+
+        	echo $version;
+    		
     }
 
     /**
@@ -228,38 +247,252 @@ class Wordpress_Brander_Admin{
      *
      * @since    1.0.0.1
      */
-    public function action_method_name() {
-            
+    public function settings_api_init() {
+            //set the settings
+	        $this->settings_api->set_sections( $this->get_settings_sections() );
+	        $this->settings_api->set_fields( $this->get_settings_fields() );
+
+	        //initialize settings
+	        $this->settings_api->initialize();
+    }
+
+
+    function get_settings_sections() {
+        $sections = array(
+            array(
+                'id' => 'wedevs_basics',
+                'title' => __( 'Basic Settings', 'wedevs' )
+            ),
+            array(
+                'id' => 'wedevs_advanced',
+                'title' => __( 'Advanced Settings', 'wedevs' )
+            ),
+            array(
+                'id' => 'wedevs_others',
+                'title' => __( 'Other Settings', 'wpuf' )
+            )
+        );
+        return $sections;
     }
 
     /**
+     * Returns all the settings fields
      *
-     * @since    1.0.0.1
+     * @return array settings fields
      */
-    public function initialize_wp_brander_options() {
+    function get_settings_fields() {
+        $settings_fields = array(
+            'wedevs_basics' => array(
+                array(
+                    'name' => 'text_val',
+                    'label' => __( 'Text Input (integer validation)', 'wedevs' ),
+                    'desc' => __( 'Text input description', 'wedevs' ),
+                    'type' => 'text',
+                    'default' => 'Title',
+                    'sanitize_callback' => 'intval'
+                ),
+                array(
+                    'name' => 'textarea',
+                    'label' => __( 'Textarea Input', 'wedevs' ),
+                    'desc' => __( 'Textarea description', 'wedevs' ),
+                    'type' => 'textarea'
+                ),
+                array(
+                    'name' => 'checkbox',
+                    'label' => __( 'Checkbox', 'wedevs' ),
+                    'desc' => __( 'Checkbox Label', 'wedevs' ),
+                    'type' => 'checkbox'
+                ),
+                array(
+                    'name' => 'radio',
+                    'label' => __( 'Radio Button', 'wedevs' ),
+                    'desc' => __( 'A radio button', 'wedevs' ),
+                    'type' => 'radio',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'multicheck',
+                    'label' => __( 'Multile checkbox', 'wedevs' ),
+                    'desc' => __( 'Multi checkbox description', 'wedevs' ),
+                    'type' => 'multicheck',
+                    'options' => array(
+                        'one' => 'One',
+                        'two' => 'Two',
+                        'three' => 'Three',
+                        'four' => 'Four'
+                    )
+                ),
+                array(
+                    'name' => 'selectbox',
+                    'label' => __( 'A Dropdown', 'wedevs' ),
+                    'desc' => __( 'Dropdown description', 'wedevs' ),
+                    'type' => 'select',
+                    'default' => 'no',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'password',
+                    'label' => __( 'Password', 'wedevs' ),
+                    'desc' => __( 'Password description', 'wedevs' ),
+                    'type' => 'password',
+                    'default' => ''
+                ),
+                array(
+                    'name' => 'file',
+                    'label' => __( 'File', 'wedevs' ),
+                    'desc' => __( 'File description', 'wedevs' ),
+                    'type' => 'file',
+                    'default' => ''
+                )
+            ),
+            'wedevs_advanced' => array(
+                array(
+                    'name' => 'text',
+                    'label' => __( 'Text Input', 'wedevs' ),
+                    'desc' => __( 'Text input description', 'wedevs' ),
+                    'type' => 'text',
+                    'default' => 'Title'
+                ),
+                array(
+                    'name' => 'textarea',
+                    'label' => __( 'Textarea Input', 'wedevs' ),
+                    'desc' => __( 'Textarea description', 'wedevs' ),
+                    'type' => 'textarea'
+                ),
+                array(
+                    'name' => 'checkbox',
+                    'label' => __( 'Checkbox', 'wedevs' ),
+                    'desc' => __( 'Checkbox Label', 'wedevs' ),
+                    'type' => 'checkbox'
+                ),
+                array(
+                    'name' => 'radio',
+                    'label' => __( 'Radio Button', 'wedevs' ),
+                    'desc' => __( 'A radio button', 'wedevs' ),
+                    'type' => 'radio',
+                    'default' => 'no',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'multicheck',
+                    'label' => __( 'Multile checkbox', 'wedevs' ),
+                    'desc' => __( 'Multi checkbox description', 'wedevs' ),
+                    'type' => 'multicheck',
+                    'default' => array('one' => 'one', 'four' => 'four'),
+                    'options' => array(
+                        'one' => 'One',
+                        'two' => 'Two',
+                        'three' => 'Three',
+                        'four' => 'Four'
+                    )
+                ),
+                array(
+                    'name' => 'selectbox',
+                    'label' => __( 'A Dropdown', 'wedevs' ),
+                    'desc' => __( 'Dropdown description', 'wedevs' ),
+                    'type' => 'select',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'password',
+                    'label' => __( 'Password', 'wedevs' ),
+                    'desc' => __( 'Password description', 'wedevs' ),
+                    'type' => 'password',
+                    'default' => ''
+                ),
+                array(
+                    'name' => 'file',
+                    'label' => __( 'File', 'wedevs' ),
+                    'desc' => __( 'File description', 'wedevs' ),
+                    'type' => 'file',
+                    'default' => ''
+                )
+            ),
+            'wedevs_others' => array(
+                array(
+                    'name' => 'text',
+                    'label' => __( 'Text Input', 'wedevs' ),
+                    'desc' => __( 'Text input description', 'wedevs' ),
+                    'type' => 'text',
+                    'default' => 'Title'
+                ),
+                array(
+                    'name' => 'textarea',
+                    'label' => __( 'Textarea Input', 'wedevs' ),
+                    'desc' => __( 'Textarea description', 'wedevs' ),
+                    'type' => 'textarea'
+                ),
+                array(
+                    'name' => 'checkbox',
+                    'label' => __( 'Checkbox', 'wedevs' ),
+                    'desc' => __( 'Checkbox Label', 'wedevs' ),
+                    'type' => 'checkbox'
+                ),
+                array(
+                    'name' => 'radio',
+                    'label' => __( 'Radio Button', 'wedevs' ),
+                    'desc' => __( 'A radio button', 'wedevs' ),
+                    'type' => 'radio',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'multicheck',
+                    'label' => __( 'Multile checkbox', 'wedevs' ),
+                    'desc' => __( 'Multi checkbox description', 'wedevs' ),
+                    'type' => 'multicheck',
+                    'options' => array(
+                        'one' => 'One',
+                        'two' => 'Two',
+                        'three' => 'Three',
+                        'four' => 'Four'
+                    )
+                ),
+                array(
+                    'name' => 'selectbox',
+                    'label' => __( 'A Dropdown', 'wedevs' ),
+                    'desc' => __( 'Dropdown description', 'wedevs' ),
+                    'type' => 'select',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'password',
+                    'label' => __( 'Password', 'wedevs' ),
+                    'desc' => __( 'Password description', 'wedevs' ),
+                    'type' => 'password',
+                    'default' => ''
+                ),
+                array(
+                    'name' => 'file',
+                    'label' => __( 'File', 'wedevs' ),
+                    'desc' => __( 'File description', 'wedevs' ),
+                    'type' => 'file',
+                    'default' => ''
+                )
+            )
+        );
 
-    		add_settings_section(
-				'favicon_uploader_section',			// ID used to identify this section and with which to register options
-				__( 'Upload Favicons.', $this->plugin_slug ),		// Title to be displayed on the administration page
-				array( $this, 'favicon_sections_callback' ),	// Callback used to render the description of the section
-				$this->plugin_slug		// Page on which to add this section of options
-			);
-
-			add_settings_field(	
-				'upload_favicon',						
-				__( 'Favicon', $this->plugin_slug ),				
-				array( $this, 'favicon_field_callback' ),	
-				$this->plugin_slug,		
-				'favicon_uploader_section',			
-				array(								
-					__( 'Activate this setting to display the footer.', 'sandbox' ),
-				)
-			);
-
-			register_setting($this->plugin_slug, 'upload_favicon' );
-
+        return $settings_fields;
     }
 
+    
     /**
      * NOTE:     Filters are points of execution in which WordPress modifies data
      *           before saving it or sending it to the browser.
@@ -302,16 +535,8 @@ class Wordpress_Brander_Admin{
 
     }
 
-    public function favicon_sections_callback(){
 
-    		echo '<p>' . __( 'Please upload your sites favicons.', $this->plugin_slug ) . '</p>';
 
-    }
-
-    public function favicon_field_callback(){
-
-    	echo '<input name="upload_favicon" id="upload_favicon" type="text" /> Upload';
-
-    }
+    
 
 }

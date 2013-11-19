@@ -26,6 +26,7 @@
 		<?php  
 			
 			submit_button();
+			
 		?>
         <!-- @TODO: Provide markup for your options page here. -->
 

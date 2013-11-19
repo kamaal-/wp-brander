@@ -66,6 +66,7 @@ class Wordpress_Brander_Admin{
 	         * Read more about actions and filters:
 	         * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 	         */
+	        add_action( 'admin_init', array( $this, 'initialize_wp_brander_options' ) );
 	        add_action( '@TODO', array( $this, 'action_method_name' ) );
 	        add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
@@ -158,9 +159,9 @@ class Wordpress_Brander_Admin{
      */
     public function add_plugin_admin_menu() {
 
-    		$topmen_exists = $this->toplevel_menu_exists();
+    		$topmenu_exists = $this->toplevel_menu_exists();
 
-    		if(!$topmen_exists){
+    		if( !$topmenu_exists ){
 
     			add_menu_page(
 	                    __( 'Custom Settings', $this->plugin_slug ),
@@ -189,8 +190,6 @@ class Wordpress_Brander_Admin{
     					array( $this, 'display_plugin_admin_page' ) );
 
     		}
-            
-
 
     }
 
@@ -202,6 +201,10 @@ class Wordpress_Brander_Admin{
     public function display_plugin_admin_page() {
 
         	include_once( 'views/admin.php' );
+
+        	settings_fields( 'favicon_uploader_section' ); 
+
+			do_settings_sections( 'favicon_uploader_section' );
     
     }
 
@@ -222,16 +225,39 @@ class Wordpress_Brander_Admin{
     }
 
     /**
-     * NOTE:     Actions are points in the execution of a page or process
-     *           lifecycle that WordPress fires.
-     *
-     *           Actions:    http://codex.wordpress.org/Plugin_API#Actions
-     *           Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
      *
      * @since    1.0.0.1
      */
     public function action_method_name() {
-            // @TODO: Define your action hook callback here
+            
+    }
+
+    /**
+     *
+     * @since    1.0.0.1
+     */
+    public function initialize_wp_brander_options() {
+
+    		add_settings_section(
+				'favicon_uploader_section',			// ID used to identify this section and with which to register options
+				__( 'Upload Favicons.', $this->plugin_slug ),		// Title to be displayed on the administration page
+				array( $this, 'favicon_sections_callback' ),	// Callback used to render the description of the section
+				$this->plugin_slug		// Page on which to add this section of options
+			);
+
+			add_settings_field(	
+				'upload_favicon',						
+				__( 'Favicon', $this->plugin_slug ),				
+				array( $this, 'favicon_field_callback' ),	
+				$this->plugin_slug,		
+				'favicon_uploader_section',			
+				array(								
+					__( 'Activate this setting to display the footer.', 'sandbox' ),
+				)
+			);
+
+			register_setting($this->plugin_slug, 'upload_favicon' );
+
     }
 
     /**
@@ -250,22 +276,42 @@ class Wordpress_Brander_Admin{
 	* Gettin wordpress version
     */
     private function get_wordpress_version(){
+
 	    	global $wp_version;
+
 	   		return $wp_version;
+
     }
 
     /**
 	* Check admin top level menu exists
     */
     private function toplevel_menu_exists(){
+
 	    	global $menu;
+
 			$menu_exist = false;
+
 			foreach($menu as $item) {
 			    if(strtolower($item[0]) == strtolower('Custom menu')) {
 			        $menu_exist = true;
 			    }
 			}
+
 			return $menu_exist;
+
+    }
+
+    public function favicon_sections_callback(){
+
+    		echo '<p>' . __( 'Please upload your sites favicons.', $this->plugin_slug ) . '</p>';
+
+    }
+
+    public function favicon_field_callback(){
+
+    	echo '<input name="upload_favicon" id="upload_favicon" type="text" /> Upload';
+
     }
 
 }

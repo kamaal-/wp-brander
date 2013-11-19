@@ -23,7 +23,10 @@
             <a href="#" class="nav-tab">Favicons</a>  
             <a href="#" class="nav-tab">Login Logo</a>  
         </h2>
-
+		<?php  
+			
+			submit_button();
+		?>
         <!-- @TODO: Provide markup for your options page here. -->
 
 </div>

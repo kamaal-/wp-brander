@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 
-	var custom_file_frame, testImage;
+	var custom_file_frame, testImage, produceImage;
 
 	$('.media-uploader').on('click', function (event) {
 
@@ -64,7 +64,12 @@ jQuery(document).ready(function($) {
 	        timedOut = true;
 	        callback(url, "timeout");
 	    }, timeout); 
-	}
+	};
+
+	pruduceImage = function (url, result) {
+	    document.body.innerHTML += "<span class='" + result + "'>" + 
+	        result + ": " + url + "</span><br>";
+	}   
 });
 
 	

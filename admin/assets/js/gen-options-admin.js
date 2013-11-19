@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
 	         },
 	         button: {
 	            //Button text
-	            text: "insert text"
+	            text: "Set as favicon"
 	         },
 	         //Do not allow multiple files, if you want multiple, set true
 	         multiple: false
@@ -35,8 +35,8 @@ jQuery(document).ready(function($) {
 	        
 	    });
 
-	      //Open modal
-	      custom_file_frame.open();
+	    //Open modal
+	    custom_file_frame.open();
 
 	});
 });

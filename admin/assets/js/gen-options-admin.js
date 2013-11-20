@@ -30,14 +30,14 @@ jQuery(document).ready(function($) {
 	    document.body.innerHTML += "<span class='" + result + "'>" + 
 	        result + ": " + url + "</span><br>";
 	};
-
+	
 	$('.media-uploader').on('click', function (event) {
 
 		var dis = $(this),
 			field = dis.closest('td').find('.media-uploader-field'),
 			imageHolder = '<div class="img-holder"></div>';
 
-
+			
 		event.preventDefault();
 		//If the frame already exists, reopen it
 	    if (typeof(custom_file_frame)!=="undefined") {

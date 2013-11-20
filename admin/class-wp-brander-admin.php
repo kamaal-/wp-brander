@@ -19,11 +19,11 @@
  */
 class Wordpress_Brander_Admin{
 
-	/**
+    /**
      * Instance of this class.
      *
      * @since    1.0.0.1
-     *
+     * 
      * @var      object
      */
     protected static $instance = null;
@@ -437,7 +437,7 @@ class Wordpress_Brander_Admin{
     /**
 	* Gettin wordpress version
     */
-    private function get_wordpress_version(){
+   protected function get_wordpress_version(){
 
 	    	global $wp_version;
 
@@ -448,7 +448,7 @@ class Wordpress_Brander_Admin{
     /**
 	* Check admin top level menu exists
     */
-    private function toplevel_menu_exists(){
+    protected function toplevel_menu_exists(){
 
 	    	global $menu;
 
@@ -462,10 +462,6 @@ class Wordpress_Brander_Admin{
 
 			return $menu_exist;
 
-    }
-
-
-
-    
+    }    
 
 }

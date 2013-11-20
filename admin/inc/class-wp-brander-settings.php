@@ -19,19 +19,6 @@
  */
 class Generate_Option {
 
-	/**
-     * Options sections array
-     * @since    1.0.0.1
-     * @var array
-     */
-    private $options_section = array();
-
-    /**
-     * Options fields array
-     * @since    1.0.0.1
-     * @var array
-     */
-    private $options_fields = array();
 
     /**
      * Style/Script Version
@@ -40,12 +27,7 @@ class Generate_Option {
      */
     private $version = '1.0.0.1';
 
-    /**
-     * Singleton instance
-     * @since    1.0.0.1
-     * @var object
-     */
-    private static $_instance;
+    
 
     /**
      * Slug of the plugin screen.
@@ -491,7 +473,7 @@ class Generate_Option {
         <div class="metabox-holder">
             <div class="postbox">
                 <?php foreach ( $this->settings_sections as $form ) { ?>
-                    <div id="<?php echo $form['id']; ?>" class="group">
+                    <div id="<?php echo $form['id'];?>" class="group">
                         <form method="post" action="options.php">
 
                             <?php do_action( 'wsa_form_top_' . $form['id'], $form ); ?>
@@ -525,10 +507,10 @@ class Generate_Option {
                 // Switches option sections
                 $('.group').hide();
                 var activetab = '';
-                if (typeof(localStorage) != 'undefined' ) {
+                if (typeof(localStorage) !== 'undefined' ) {
                     activetab = localStorage.getItem("activetab");
                 }
-                if (activetab != '' && $(activetab).length ) {
+                if (activetab !== '' && $(activetab).length ) {
                     $(activetab).fadeIn();
                 } else {
                     $('.group:first').fadeIn();
@@ -544,7 +526,7 @@ class Generate_Option {
                     });
                 });
 
-                if (activetab != '' && $(activetab + '-tab').length ) {
+                if (activetab !== '' && $(activetab + '-tab').length ) {
                     $(activetab + '-tab').addClass('nav-tab-active');
                 }
                 else {
@@ -554,7 +536,7 @@ class Generate_Option {
                     $('.nav-tab-wrapper a').removeClass('nav-tab-active');
                     $(this).addClass('nav-tab-active').blur();
                     var clicked_group = $(this).attr('href');
-                    if (typeof(localStorage) != 'undefined' ) {
+                    if (typeof(localStorage) !== 'undefined' ) {
                         localStorage.setItem("activetab", $(this).attr('href'));
                     }
                     $('.group').hide();
@@ -568,6 +550,3 @@ class Generate_Option {
 
 
 }
-
-
-?>

@@ -2,6 +2,35 @@ jQuery(document).ready(function($) {
 
 	var custom_file_frame, testImage, produceImage;
 
+
+	testImage =  function (url, callback, timeout) {
+	    timeout = timeout || 5000;
+	    var timedOut = false, timer;
+	    var img = new Image();
+	    img.onerror = img.onabort = function() {
+	        if (!timedOut) {
+	            clearTimeout(timer);
+	            callback(url, "error");
+	        }
+	    };
+	    img.onload = function() {
+	        if (!timedOut) {
+	            clearTimeout(timer);
+	            callback(url, "success");
+	        }
+	    };
+	    img.src = url;
+	    timer = setTimeout(function() {
+	        timedOut = true;
+	        callback(url, "timeout");
+	    }, timeout); 
+	};
+
+	produceImage = function (url, result) {
+	    document.body.innerHTML += "<span class='" + result + "'>" + 
+	        result + ": " + url + "</span><br>";
+	};
+
 	$('.media-uploader').on('click', function (event) {
 
 		var dis = $(this),
@@ -43,33 +72,7 @@ jQuery(document).ready(function($) {
 	});
 
 
-	testImage =  function (url, callback, timeout) {
-	    timeout = timeout || 5000;
-	    var timedOut = false, timer;
-	    var img = new Image();
-	    img.onerror = img.onabort = function() {
-	        if (!timedOut) {
-	            clearTimeout(timer);
-	            callback(url, "error");
-	        }
-	    };
-	    img.onload = function() {
-	        if (!timedOut) {
-	            clearTimeout(timer);
-	            callback(url, "success");
-	        }
-	    };
-	    img.src = url;
-	    timer = setTimeout(function() {
-	        timedOut = true;
-	        callback(url, "timeout");
-	    }, timeout); 
-	};
-
-	produceImage = function (url, result) {
-	    document.body.innerHTML += "<span class='" + result + "'>" + 
-	        result + ": " + url + "</span><br>";
-	}   
+	   
 });
 
 	

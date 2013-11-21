@@ -58,17 +58,6 @@ class Generate_Option {
      */
 	public function enqueue_options_styles() {
 
-            if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
-                    return;
-            }
-
-            $screen = get_current_screen();
-            if ( $this->plugin_screen_hook_suffix == $screen->id ) {
-
-
-            	
-            }
-
     }
 
     /**

@@ -279,70 +279,11 @@ class Wordpress_Brander_Admin{
     function get_settings_fields() {
         $settings_fields = array(
             'wp_brander_favicons' => array(
-                array(
-                    'name' => 'text_val',
-                    'label' => __( 'Text Input (integer validation)', 'wedevs' ),
-                    'desc' => __( 'Text input description', 'wedevs' ),
-                    'type' => 'text',
-                    'default' => 'Title',
-                    'sanitize_callback' => 'intval'
-                ),
-                array(
-                    'name' => 'textarea',
-                    'label' => __( 'Textarea Input', 'wedevs' ),
-                    'desc' => __( 'Textarea description', 'wedevs' ),
-                    'type' => 'textarea'
-                ),
-                array(
-                    'name' => 'checkbox',
-                    'label' => __( 'Checkbox', 'wedevs' ),
-                    'desc' => __( 'Checkbox Label', 'wedevs' ),
-                    'type' => 'checkbox'
-                ),
-                array(
-                    'name' => 'radio',
-                    'label' => __( 'Radio Button', 'wedevs' ),
-                    'desc' => __( 'A radio button', 'wedevs' ),
-                    'type' => 'radio',
-                    'options' => array(
-                        'yes' => 'Yes',
-                        'no' => 'No'
-                    )
-                ),
-                array(
-                    'name' => 'multicheck',
-                    'label' => __( 'Multile checkbox', 'wedevs' ),
-                    'desc' => __( 'Multi checkbox description', 'wedevs' ),
-                    'type' => 'multicheck',
-                    'options' => array(
-                        'one' => 'One',
-                        'two' => 'Two',
-                        'three' => 'Three',
-                        'four' => 'Four'
-                    )
-                ),
-                array(
-                    'name' => 'selectbox',
-                    'label' => __( 'A Dropdown', 'wedevs' ),
-                    'desc' => __( 'Dropdown description', 'wedevs' ),
-                    'type' => 'select',
-                    'default' => 'no',
-                    'options' => array(
-                        'yes' => 'Yes',
-                        'no' => 'No'
-                    )
-                ),
-                array(
-                    'name' => 'password',
-                    'label' => __( 'Password', 'wedevs' ),
-                    'desc' => __( 'Password description', 'wedevs' ),
-                    'type' => 'password',
-                    'default' => ''
-                ),
+                
                 array(
                     'name' => 'file',
-                    'label' => __( 'File', 'wedevs' ),
-                    'desc' => __( 'File description', 'wedevs' ),
+                    'label' => __( 'Favicon', 'wedevs' ),
+                    'desc' => __( '<span>File description</span>', 'wedevs' ),
                     'type' => 'file',
                     'default' => ''
                 )

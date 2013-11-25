@@ -46,34 +46,34 @@ class Wordpress_Brander_Admin{
      * @since     1.0.0.1
      */
     private function __construct() {
-	        
-	        require_once(ABSPATH.'wp-admin/includes/plugin.php');
+            
+            require_once(ABSPATH.'wp-admin/includes/plugin.php');
 
-	        $plugin = WP_Brander::get_instance();
+            $plugin = WP_Brander::get_instance();
 
-	        $this->settings_api = new Generate_Option( 'custom-menu_page_elephas-wp-brander' );
+            $this->settings_api = new Generate_Option( 'custom-menu_page_elephas-wp-brander' );
 
-	        $this->plugin_slug = $plugin->get_plugin_slug();
-	        $this->parent_slug = $plugin->get_parent_slug();
+            $this->plugin_slug = $plugin->get_plugin_slug();
+            $this->parent_slug = $plugin->get_parent_slug();
 
-	        // Load admin style sheet and JavaScript.
-	        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
-	        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+            // Load admin style sheet and JavaScript.
+            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
-	        // Add the options page and menu item.
-	        add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
+            // Add the options page and menu item.
+            add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
 
 
-	        // Add an action link pointing to the options page.
-	        $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . 'wp-brander.php' );
-	        add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
+            // Add an action link pointing to the options page.
+            $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . 'wp-brander.php' );
+            add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 
-	        //Action
-	        add_action( 'admin_init', array( $this, 'settings_api_init' ) );
+            //Action
+            add_action( 'admin_init', array( $this, 'settings_api_init' ) );
 
-	        //Filter
-	        add_filter( '@TODO', array( $this, 'filter_method_name' ) );
+            //Filter
+            add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
     }
 
@@ -86,20 +86,20 @@ class Wordpress_Brander_Admin{
      */
     public static function get_instance() {
 
-	        /*
-	         *
-	         * - Uncomment following lines if the admin class should only be available for super admins
-	         */
-	        /* if( ! is_super_admin() ) {
-	                return;
-	        } */
+            /*
+             *
+             * - Uncomment following lines if the admin class should only be available for super admins
+             */
+            /* if( ! is_super_admin() ) {
+                    return;
+            } */
 
-	        // If the single instance hasn't been set, set it now.
-	        if ( null == self::$instance ) {
-	                self::$instance = new self;
-	        }
+            // If the single instance hasn't been set, set it now.
+            if ( null == self::$instance ) {
+                    self::$instance = new self;
+            }
 
-	        return self::$instance;
+            return self::$instance;
     }
 
     /**
@@ -119,13 +119,13 @@ class Wordpress_Brander_Admin{
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
 
-            		//Load Latest media manager if exists
-            		if( !function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '<=' ) ) {
-				        wp_enqueue_style('thickbox');
-				    }
-				    
+                    //Load Latest media manager if exists
+                    if( !function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '<=' ) ) {
+                        wp_enqueue_style('thickbox');
+                    }
+                    
 
-				    wp_enqueue_style( 'wp-color-picker' );
+                    wp_enqueue_style( 'wp-color-picker' );
                     wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/wp-brander-admin.css', __FILE__ ), array(), WP_Brander::VERSION );
             }
 
@@ -148,17 +148,17 @@ class Wordpress_Brander_Admin{
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
 
-            		//Load Latest media manager if exists
-            		if( function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '>=' ) ) {
-				        //call for new media manager
-				        wp_enqueue_media();
-				         wp_enqueue_script('wp-color-picker');
-				    }
-				    //Or old WP < 3.5
-				    else {
-				        wp_enqueue_script('media-upload');
-				        wp_enqueue_script('thickbox');
-				    }
+                    //Load Latest media manager if exists
+                    if( function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '>=' ) ) {
+                        //call for new media manager
+                        wp_enqueue_media();
+                         wp_enqueue_script('wp-color-picker');
+                    }
+                    //Or old WP < 3.5
+                    else {
+                        wp_enqueue_script('media-upload');
+                        wp_enqueue_script('thickbox');
+                    }
 
                     wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/wp-brander-admin.js', __FILE__ ), array( 'jquery' ), WP_Brander::VERSION );
             }
@@ -172,37 +172,37 @@ class Wordpress_Brander_Admin{
      */
     public function add_plugin_admin_menu() {
 
-    		$topmenu_exists = $this->toplevel_menu_exists();
+            $topmenu_exists = $this->toplevel_menu_exists();
 
-    		if( !$topmenu_exists ){
+            if( !$topmenu_exists ){
 
-    			add_menu_page(
-	                    __( 'Custom Settings', $this->plugin_slug ),
-	                    __( 'Custom menu', $this->parent_slug ),
-	                    'remove_users',
-	                    $this->parent_slug,
-	                    array( $this, 'display_plugin_admin_page' )
-	            );
+                add_menu_page(
+                        __( 'Custom Settings', $this->plugin_slug ),
+                        __( 'Custom menu', $this->parent_slug ),
+                        'remove_users',
+                        $this->parent_slug,
+                        array( $this, 'display_plugin_admin_page' )
+                );
 
-    			$this->plugin_screen_hook_suffix = add_submenu_page( 
-    					$this->parent_slug , 
-    					'Wordpress Brander Settings', 
-    					'Wordpress Brander', 
-    					'remove_users', 
-    					$this->plugin_slug, 
-    					array( $this, 'display_plugin_admin_page' ) );
+                $this->plugin_screen_hook_suffix = add_submenu_page( 
+                        $this->parent_slug , 
+                        'Wordpress Brander Settings', 
+                        'Wordpress Brander', 
+                        'remove_users', 
+                        $this->plugin_slug, 
+                        array( $this, 'display_plugin_admin_page' ) );
 
-    		}else{
+            }else{
 
-    			$this->plugin_screen_hook_suffix = add_submenu_page( 
-    					$this->parent_slug , 
-    					'Wordpress Brander Settings', 
-    					'Wordpress Brander', 
-    					'remove_users', 
-    					$this->plugin_slug, 
-    					array( $this, 'display_plugin_admin_page' ) );
+                $this->plugin_screen_hook_suffix = add_submenu_page( 
+                        $this->parent_slug , 
+                        'Wordpress Brander Settings', 
+                        'Wordpress Brander', 
+                        'remove_users', 
+                        $this->plugin_slug, 
+                        array( $this, 'display_plugin_admin_page' ) );
 
-    		}
+            }
 
     }
 
@@ -213,18 +213,18 @@ class Wordpress_Brander_Admin{
      */
     public function display_plugin_admin_page() {
 
-        	echo '<div class="wrap">';
+            echo '<div class="wrap">';
 
-	        $this->settings_api->show_navigation();
-	        $this->settings_api->show_forms();
+            $this->settings_api->show_navigation();
+            $this->settings_api->show_forms();
 
-	        echo '</div>';
+            echo '</div>';
 
-        	$seoboosterpropluginfo = get_plugin_data( WP_PLUGIN_DIR . '/wp-brander/wp-brander.php');
-			$version = $seoboosterpropluginfo['Version'];
+            $seoboosterpropluginfo = get_plugin_data( WP_PLUGIN_DIR . '/wp-brander/wp-brander.php');
+            $version = $seoboosterpropluginfo['Version'];
 
-        	echo $version;
-    		
+            echo $version;
+            
     }
 
     /**
@@ -249,11 +249,11 @@ class Wordpress_Brander_Admin{
      */
     public function settings_api_init() {
             //set the settings
-	        $this->settings_api->set_sections( $this->get_settings_sections() );
-	        $this->settings_api->set_fields( $this->get_settings_fields() );
+            $this->settings_api->set_sections( $this->get_settings_sections() );
+            $this->settings_api->set_fields( $this->get_settings_fields() );
 
-	        //initialize settings
-	        $this->settings_api->initialize();
+            //initialize settings
+            $this->settings_api->initialize();
     }
 
 
@@ -279,11 +279,70 @@ class Wordpress_Brander_Admin{
     function get_settings_fields() {
         $settings_fields = array(
             'wp_brander_favicons' => array(
-                
+                array(
+                    'name' => 'text_val',
+                    'label' => __( 'Text Input (integer validation)', 'wedevs' ),
+                    'desc' => __( 'Text input description', 'wedevs' ),
+                    'type' => 'text',
+                    'default' => 'Title',
+                    'sanitize_callback' => 'intval'
+                ),
+                array(
+                    'name' => 'textarea',
+                    'label' => __( 'Textarea Input', 'wedevs' ),
+                    'desc' => __( 'Textarea description', 'wedevs' ),
+                    'type' => 'textarea'
+                ),
+                array(
+                    'name' => 'checkbox',
+                    'label' => __( 'Checkbox', 'wedevs' ),
+                    'desc' => __( 'Checkbox Label', 'wedevs' ),
+                    'type' => 'checkbox'
+                ),
+                array(
+                    'name' => 'radio',
+                    'label' => __( 'Radio Button', 'wedevs' ),
+                    'desc' => __( 'A radio button', 'wedevs' ),
+                    'type' => 'radio',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'multicheck',
+                    'label' => __( 'Multile checkbox', 'wedevs' ),
+                    'desc' => __( 'Multi checkbox description', 'wedevs' ),
+                    'type' => 'multicheck',
+                    'options' => array(
+                        'one' => 'One',
+                        'two' => 'Two',
+                        'three' => 'Three',
+                        'four' => 'Four'
+                    )
+                ),
+                array(
+                    'name' => 'selectbox',
+                    'label' => __( 'A Dropdown', 'wedevs' ),
+                    'desc' => __( 'Dropdown description', 'wedevs' ),
+                    'type' => 'select',
+                    'default' => 'no',
+                    'options' => array(
+                        'yes' => 'Yes',
+                        'no' => 'No'
+                    )
+                ),
+                array(
+                    'name' => 'password',
+                    'label' => __( 'Password', 'wedevs' ),
+                    'desc' => __( 'Password description', 'wedevs' ),
+                    'type' => 'password',
+                    'default' => ''
+                ),
                 array(
                     'name' => 'file',
-                    'label' => __( 'Favicon', 'wedevs' ),
-                    'desc' => __( '<span>File description</span>', 'wedevs' ),
+                    'label' => __( 'File', 'wedevs' ),
+                    'desc' => __( 'File description', 'wedevs' ),
                     'type' => 'file',
                     'default' => ''
                 )
@@ -376,32 +435,32 @@ class Wordpress_Brander_Admin{
             // @TODO: Define your filter hook callback here
     }
     /**
-	* Gettin wordpress version
+    * Gettin wordpress version
     */
    protected function get_wordpress_version(){
 
-	    	global $wp_version;
+            global $wp_version;
 
-	   		return $wp_version;
+            return $wp_version;
 
     }
 
     /**
-	* Check admin top level menu exists
+    * Check admin top level menu exists
     */
     protected function toplevel_menu_exists(){
 
-	    	global $menu;
+            global $menu;
 
-			$menu_exist = false;
+            $menu_exist = false;
 
-			foreach($menu as $item) {
-			    if(strtolower($item[0]) == strtolower('Custom menu')) {
-			        $menu_exist = true;
-			    }
-			}
+            foreach($menu as $item) {
+                if(strtolower($item[0]) == strtolower('Custom menu')) {
+                    $menu_exist = true;
+                }
+            }
 
-			return $menu_exist;
+            return $menu_exist;
 
     }    
 

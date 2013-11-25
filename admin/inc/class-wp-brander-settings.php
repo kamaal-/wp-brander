@@ -27,8 +27,6 @@ class Generate_Option {
      */
     private $version = '1.0.0.1';
 
-    
-
     /**
      * Slug of the plugin screen.
      *
@@ -51,7 +49,6 @@ class Generate_Option {
 	/**
      * Register and enqueue admin-specific style sheet.
      *
-     *
      * @since     1.0.0.1
      *
      * @return    null    Return early if no settings page is registered.
@@ -62,7 +59,6 @@ class Generate_Option {
 
     /**
      * Register and enqueue admin-specific JavaScript.
-     *
      *
      * @since     1.0.0.1
      *

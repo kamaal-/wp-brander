@@ -72,6 +72,8 @@ class Wordpress_Brander_Admin{
             //Action
             add_action( 'admin_init', array( $this, 'settings_api_init' ) );
 
+            add_action('admin_enqueue_scripts', array( $this,'helper_pointers') );
+
             //Filter
             add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
@@ -144,7 +146,7 @@ class Wordpress_Brander_Admin{
             if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
                     return;
             }
-
+            wp_enqueue_script('wp-color-picker');
             $screen = get_current_screen();
             if ( $this->plugin_screen_hook_suffix == $screen->id ) {
 
@@ -152,7 +154,7 @@ class Wordpress_Brander_Admin{
                     if( function_exists('wp_enqueue_media') && version_compare( self::get_wordpress_version(), '3.5', '>=' ) ) {
                         //call for new media manager
                         wp_enqueue_media();
-                         wp_enqueue_script('wp-color-picker');
+                        
                     }
                     //Or old WP < 3.5
                     else {
@@ -462,6 +464,39 @@ class Wordpress_Brander_Admin{
 
             return $menu_exist;
 
-    }    
+    }
+
+    public function helper_pointers(){
+
+        $pointers = array(
+                        array(
+                            'id' => '65894',   // unique id for this pointer
+                            'screen' => 'custom-menu_page_elephas-wp-brander', // this is the page hook we want our pointer to show on
+                            'target' => '.media-uploader-field', // the css selector for the pointer to be tied to, best to use ID's
+                            'title' => 'My ToolTip',
+                            'content' => 'My tooltips Description',
+                            'position' => array( 
+                                               'edge' => 'top', //top, bottom, left, right
+                                               'align' => 'middle' //top, bottom, left, right, middle
+                                               )
+                            ),
+
+                        array(
+                            'id' => '6581',
+                            'screen' => 'custom-menu_page_elephas-wp-brander',
+                             'target' => '.regular-text',
+                             'title' => 'Regular Text',
+                            'content' => 'Description',
+                            'position' => array( 
+                                   'edge' => 'left', //top, bottom, left, right
+                                   'align' => 'right' //top, bottom, left, right, middle
+                                   )
+                        )
+                         // more as needed
+                         );
+       //Now we instantiate the class and pass our pointer array to the constructor 
+       $myPointers = new WP_Help_Pointer($pointers);
+
+    }
 
 }

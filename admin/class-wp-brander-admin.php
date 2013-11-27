@@ -488,9 +488,10 @@ class Wordpress_Brander_Admin{
                             'target' => '#wp_brander_favicons-textarea',
                             'title' => 'Second Tooltip',
                             'content' => 'My tooltips Description',
+                            'close_btn' => 'End',
                             'position' => array( 
-                                               'edge' => 'top', //top, bottom, left, right
-                                               'align' => 'middle' //top, bottom, left, right, middle
+                                               'edge' => 'left', //top, bottom, left, right
+                                               'align' => 'left' //top, bottom, left, right, middle
                                                )
                             )
                          );

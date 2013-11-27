@@ -37,12 +37,15 @@ class WP_Help_Pointer {
         $pointers = $this->pointers;
         
         foreach( $pntrs as $ptr ) {
+
+            $clese_txt = array_key_exists( 'close_btn', $ptr )  ?  $ptr['close_btn'] : 'Close';
                  
             if( $ptr['screen'] == $this->screen_id ) {
                 
                 $pointers[$ptr['id']] = array(
                     'screen' => $ptr['screen'],
                     'target' => $ptr['target'],
+                    'closeBtn' => $clese_txt,
                     'options' => array(
                         'content' => sprintf( '<h3> %s </h3> <p> %s </p>',
                             __( $ptr['title'] , 'plugindomain' ),

@@ -56,9 +56,7 @@ class Wordpress_Brander_Admin{
             $this->plugin_slug = $plugin->get_plugin_slug();
             $this->parent_slug = $plugin->get_parent_slug();
  
-            // Load admin style sheet and JavaScript.
-            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
-            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+            
  
             // Add the options page and menu item.
             add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
@@ -73,6 +71,10 @@ class Wordpress_Brander_Admin{
             add_action( 'admin_init', array( $this, 'settings_api_init' ) );
  
             add_action('admin_enqueue_scripts', array( $this,'helper_pointers') );
+
+            // Load admin style sheet and JavaScript.
+            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+            add_action( 'admin_footer', array( $this, 'enqueue_admin_scripts' ) );
  
             //Filter
             add_filter( '@TODO', array( $this, 'filter_method_name' ) );
@@ -162,7 +164,7 @@ class Wordpress_Brander_Admin{
                         wp_enqueue_script('thickbox');
                     }
  
-                    wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/wp-brander-admin.js', __FILE__ ), array( 'jquery' ), WP_Brander::VERSION );
+                    wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/wp-brander-admin.js', __FILE__ ), array( 'jquery', 'wp-pointer' ), WP_Brander::VERSION );
             }
  
     }
@@ -470,10 +472,21 @@ class Wordpress_Brander_Admin{
  
         $pointers = array(
                         array(
-                            'id' => '54',   // unique id for this pointer
+                            'id' => '540',   // unique id for this pointer
                             'screen' => 'custom-menu_page_elephas-wp-brander', // this is the page hook we want our pointer to show on
                             'target' => '.media-uploader-field', // the css selector for the pointer to be tied to, best to use ID's
                             'title' => 'My ToolTip',
+                            'content' => 'My tooltips Description',
+                            'position' => array( 
+                                               'edge' => 'top', //top, bottom, left, right
+                                               'align' => 'middle' //top, bottom, left, right, middle
+                                               )
+                            ),
+                        array(
+                            'id' => '555',
+                            'screen' => 'custom-menu_page_elephas-wp-brander', 
+                            'target' => '#wp_brander_favicons-textarea',
+                            'title' => 'Second Tooltip',
                             'content' => 'My tooltips Description',
                             'position' => array( 
                                                'edge' => 'top', //top, bottom, left, right
@@ -483,7 +496,7 @@ class Wordpress_Brander_Admin{
                          );
        //Now we instantiate the class and pass our pointer array to the constructor 
        $myPointers = new WP_Help_Pointer($pointers);
- 
+       
     }
  
 }

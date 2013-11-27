@@ -1,33 +1,7 @@
 <?php
  
 /**
- * How to Use:
- * Pointers are defined in an associative array and passed to the class upon instantiation.
- * First we hook into the 'admin_enqueue_scripts' hook with our function:
  *
- *   add_action('admin_enqueue_scripts', 'myHelpPointers');
- *   
- *   function myHelpPointers() {
- *      //First we define our pointers 
- *      $pointers = array(
- *                       array(
- *                           'id' => 'xyz123',   // unique id for this pointer
- *                           'screen' => 'page', // this is the page hook we want our pointer to show on
- *                           'target' => '#element-selector', // the css selector for the pointer to be tied to, best to use ID's
- *                           'title' => 'My ToolTip',
- *                           'content' => 'My tooltips Description',
- *                           'position' => array( 
- *                                              'edge' => 'top', //top, bottom, left, right
- *                                              'align' => 'middle' //top, bottom, left, right, middle
- *                                              )
- *                           )
- *                        // more as needed
- *                        );
- *      //Now we instantiate the class and pass our pointer array to the constructor 
- *      $myPointers = new WP_Help_Pointer($pointers);
- *    }
- *
- * 
  * @package WP_Help_Pointer
  * @version 0.1
  * @author Tim Debo <tim@rawcreativestudios.com>
@@ -54,7 +28,8 @@ class WP_Help_Pointer {
         $this->register_pointers($pntrs);
  
         add_action( 'admin_enqueue_scripts', array( &$this, 'add_pointers' ), 1000 );
-        add_action( 'admin_head', array( &$this, 'add_scripts' ) );
+       
+        //add_action( 'admin_footer', array( &$this, 'add_scripts' ) );
     }
  
     public function register_pointers( $pntrs ) {
@@ -116,44 +91,25 @@ class WP_Help_Pointer {
  
         wp_enqueue_style( 'wp-pointer' );
         wp_enqueue_script( 'wp-pointer' );
+        wp_localize_script( 'jquery', 'alpha', $this->_gen_pionter_object() );
     }
     
-    public function add_scripts() {
+    private function _gen_pionter_object() {
+
         $pointers = $this->valid;
        
         if( empty( $pointers ) ) 
             return;
  
-        $pointers = json_encode( $pointers );
-        $html = '';
- 
-         
-        $html .= "<script id=\"js-pointer\" type=\"text/javascript\">
-        jQuery(document).ready( function($) {
-             
-            var WPHelpPointer = {$pointers};
-            
-            $.each(WPHelpPointer.pointers, function(i) {
-                wp_help_pointer_open(i);
-            });
- 
-            function wp_help_pointer_open(i) {
-                pointer = WPHelpPointer.pointers[i];
-                options = $.extend( pointer.options, {
-                    close: function() {
-                        $.post( ajaxurl, {
-                            pointer: '0',
-                            action: 'dismiss-wp-pointer'
-                        });
-                    }
-                });
-                $(pointer.target).pointer( options ).pointer('open');
-            }
-        });
-        </script>";
- 
-        echo $html;
+        //$pointers = json_encode( $pointers );
+        
+        return array( 
+            'pointers' => $pointers,
+            'ajaxurl' => admin_url('admin-ajax.php')
+        );
          
     }
+
+    
  
 } // end class

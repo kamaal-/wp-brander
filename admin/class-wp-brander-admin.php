@@ -176,37 +176,16 @@ class Wordpress_Brander_Admin{
      */
     public function add_plugin_admin_menu() {
  
-            $topmenu_exists = $this->toplevel_menu_exists();
+            
  
-            if( !$topmenu_exists ){
+            $this->plugin_screen_hook_suffix = add_options_page( 
+                    'Wordpress Brander Settings', 
+                    'Wordpress Brander', 
+                    'remove_users', 
+                    $this->plugin_slug, 
+                    array( $this, 'display_plugin_admin_page' ) );
  
-                add_menu_page(
-                        __( 'Custom Settings', $this->plugin_slug ),
-                        __( 'Custom menu', $this->parent_slug ),
-                        'remove_users',
-                        $this->parent_slug,
-                        array( $this, 'display_plugin_admin_page' )
-                );
- 
-                $this->plugin_screen_hook_suffix = add_submenu_page( 
-                        $this->parent_slug , 
-                        'Wordpress Brander Settings', 
-                        'Wordpress Brander', 
-                        'remove_users', 
-                        $this->plugin_slug, 
-                        array( $this, 'display_plugin_admin_page' ) );
- 
-            }else{
- 
-                $this->plugin_screen_hook_suffix = add_submenu_page( 
-                        $this->parent_slug , 
-                        'Wordpress Brander Settings', 
-                        'Wordpress Brander', 
-                        'remove_users', 
-                        $this->plugin_slug, 
-                        array( $this, 'display_plugin_admin_page' ) );
- 
-            }
+            
  
     }
  
@@ -449,24 +428,6 @@ class Wordpress_Brander_Admin{
  
     }
  
-    /**
-    * Check admin top level menu exists
-    */
-    protected function toplevel_menu_exists(){
- 
-            global $menu;
- 
-            $menu_exist = false;
- 
-            foreach($menu as $item) {
-                if(strtolower($item[0]) == strtolower('Custom menu')) {
-                    $menu_exist = true;
-                }
-            }
- 
-            return $menu_exist;
- 
-    }
  
     public function helper_pointers(){
  

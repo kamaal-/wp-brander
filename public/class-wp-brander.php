@@ -151,7 +151,6 @@ class WP_Brander {
 					switch_to_blog( $blog_id );
 					self::single_activate();
 				}
-elephas-
 				restore_current_blog();
 
 			} else {
